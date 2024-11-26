@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserModel extends Model
+class UserModel extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use HasFactory, Notifiable, HasUuid;
 
     protected $table = 'user';
+
     protected $fillable = [
         'email',
         'password_hash',
@@ -17,6 +22,10 @@ class UserModel extends Model
         'phone_number',
         'role_id',
         'alamat',
+    ];
+
+    protected $hidden = [
+        'password_hash',
     ];
 
     public function role()
@@ -27,5 +36,20 @@ class UserModel extends Model
     public function reservations()
     {
         return $this->hasMany(ReservasiModel::class, 'user_id');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
     }
 }
