@@ -8,16 +8,12 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware(['auth.jwt', 'role:admin'])->only([
-    //         'getAllTransactionHistory',
-    //     ]);
-
-    //     $this->middleware(['auth.jwt', 'role:user'])->only([
-    //         'getTransactionHistory',
-    //     ]);
-    // }
+    public function __construct()
+    {
+        $this->middleware(['auth.jwt', 'role:admin'])->only([
+            'getTransactionHistory',
+        ]);
+    }
     public function getTransactionHistory()
     {
         try {

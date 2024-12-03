@@ -16,7 +16,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if(auth()->user()->role->name !== $role) {
+        if(auth()->user()->role->role_name !== $role) {
             return response()->json([
                 "status" => [
                     "code" => 401,
