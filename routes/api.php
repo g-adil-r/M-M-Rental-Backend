@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
@@ -26,4 +27,8 @@ Route::prefix('/user')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth.jwt');
     Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth.jwt');
     Route::get('/current-user', [AuthController::class, 'me'])->middleware('auth.jwt');
+});
+
+Route::middleware(['auth.jwt'])->prefix('/payments')->group(function () {
+    Route::get('/history', [PaymentController::class, 'getTransactionHistory']);
 });
