@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             JenisMobilSeeder::class,
             UserSeeder::class,
             CarSeeder::class,
+            MetodePembayaranSeeder::class,
+            ReservasiSeeder::class,
+            PembayaranSeeder::class
         ];
 
         $this->call($seederClasses);
