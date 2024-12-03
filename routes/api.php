@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\API\PembayaranController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
@@ -30,5 +30,6 @@ Route::prefix('/user')->group(function () {
 });
 
 Route::middleware(['auth.jwt'])->prefix('/payments')->group(function () {
-    Route::get('/history', [PaymentController::class, 'getTransactionHistory']);
+    Route::get('/history', [PembayaranController::class, 'getTransactionHistory']);
+    Route::put('/verify/{id}', [PembayaranController::class, 'verifyPayment']);
 });
