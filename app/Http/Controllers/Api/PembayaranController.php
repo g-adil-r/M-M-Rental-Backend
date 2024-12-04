@@ -14,6 +14,33 @@ class PembayaranController extends Controller
             'verifyPayment',
         ]);
     }
+
+    public function processPayment(Request $request)
+    {
+        $validatedData = $request->validate([
+            'reservation_id' => 'required|exists:reservations,id',
+            'payment_method_id' => 'required|exists:metode_pembayaran,id',
+            'amount' => 'required|numeric',
+        ]);
+
+        try {
+            $user = auth()->user();
+
+            $payment = PembayaranModel::create([
+                'reservation_id' => $validatedData['reservation_id'],
+                'user_id' => $user->id,
+                'metode_pembayaran_id' => $validatedData['payment_method_id'],
+                'jumlah' => $validatedData['amount'],
+                'status' => 'pending',
+            ]);
+
+            $payment->save();
+
+            return response()->json(['payment' => $payment], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Payment processing failed', 'message' => $e->getMessage()], 500);
+        }
+    }
     public function getTransactionHistory()
     {
         try {
@@ -34,7 +61,6 @@ class PembayaranController extends Controller
     public function verifyPayment($id)
     {
         try {
-            $user = auth()->user();
             $pembayaran = PembayaranModel::find($id);
             if (!$pembayaran) {
                 return response()->json(['error' => 'Payment not found'], 404);
